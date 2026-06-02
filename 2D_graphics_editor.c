@@ -104,28 +104,74 @@ int main()
     return 0;
 }
 
-void initializeCanvas(void) {
-
+void initializeCanvas() {
+    for(int i=0;i<ROWS;i++){
+        for(int j=0;j<COLS;j++){
+            canvas[i][j]='_';
+        }
+    }
 }
 
 void plot(int x, int y){
-
+    if(x>=0 && x<COLS && y>=0 && y<ROWS){
+        canvas[y][x]='*';
+    }
 }
 
 void drawLine(int x1, int y1, int x2, int y2){
-
+    int dx= abs(x2-x1);
+    int dy= abs(y2-y1);
+    int sx= (x1<x2)?1:-1;
+    int sy= (y1<y2)?1:-1;
+    int err= dx-dy;
+    while (1) {
+        plot(x1, y1);
+        if (x1 == x2 && y1 == y2) break;
+        int e2 = 2 * err;
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
+        }
+    }
 }
 
 void drawRectangle(int x1, int y1, int x2, int y2){
-
+    drawLine(x1, y1, x2, y1);
+    drawLine(x2, y1, x2, y2);
+    drawLine(x2, y2, x1, y2);
+    drawLine(x1, y2, x1, y1);
 }
 
 void drawCircle(int xc, int yc, int radius){
-
+    int x = 0, y = radius;
+    int d = 3 - 2 * radius;
+    while (y >= x) {
+        plot(xc + x, yc + y);
+        plot(xc - x, yc + y);
+        plot(xc + x, yc - y);
+        plot(xc - x, yc - y);
+        plot(xc + y, yc + x);
+        plot(xc - y, yc + x);
+        plot(xc + y, yc - x);
+        plot(xc - y, yc - x);
+        x++;
+        if (d > 0) {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        } else {
+            d = d + 4 * x + 6;
+        }
+    }
 }
 
 void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3){
-
+    drawLine(x1, y1, x2, y2);
+    drawLine(x2, y2, x3, y3);
+    drawLine(x3, y3, x1, y1);
 }
 
 void redrawCanvas(){
@@ -169,5 +215,23 @@ void displayMenu(){
 }
 
 void renderObject(Object obj){
-    
+    switch (obj.type) {
+        case LINE:
+            drawLine(obj.data.line.x1, obj.data.line.y1,
+                     obj.data.line.x2, obj.data.line.y2);
+            break;
+        case RECTANGLE:
+            drawRectangle(obj.data.rect.x1, obj.data.rect.y1,
+                          obj.data.rect.x2, obj.data.rect.y2);
+            break;
+        case CIRCLE:
+            drawCircle(obj.data.circle.xc, obj.data.circle.yc,
+                       obj.data.circle.radius);
+            break;
+        case TRIANGLE:
+            drawTriangle(obj.data.tri.x1, obj.data.tri.y1,
+                         obj.data.tri.x2, obj.data.tri.y2,
+                         obj.data.tri.x3, obj.data.tri.y3);
+            break;
+    }
 }
