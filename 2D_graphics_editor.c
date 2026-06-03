@@ -175,11 +175,20 @@ void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3){
 }
 
 void redrawCanvas(){
-
+    initializeCanvas();
+    for (int i = 0; i < objectCount; i++) {
+        renderObject(objects[i]);
+    }
 }
 
 void displayCanvas(){
-
+    redrawCanvas();
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%c", canvas[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 void addLine(){
