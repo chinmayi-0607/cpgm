@@ -192,11 +192,37 @@ void displayCanvas(){
 }
 
 void addLine(){
+    if (objectCount >= MAX) {
+        printf("Object limit reached\n");
+        return;
+    }
+    Object obj;
+    obj.type = LINE;
 
+    printf("Enter x1 y1 x2 y2: ");
+    scanf("%d %d %d %d",
+          &obj.data.line.x1, &obj.data.line.y1,
+          &obj.data.line.x2, &obj.data.line.y2);
+          objects[objectCount++] = obj;
+    printf("Line added successfully\n");
 }
 
 void addRectangle(){
+    if (objectCount >= MAX) {
+        printf("Object limit reached\n");
+        return;
+    }
 
+    Object obj;
+    obj.type = RECTANGLE;
+
+    printf("Enter x1 y1 x2 y2: ");
+    scanf("%d %d %d %d",
+          &obj.data.rect.x1, &obj.data.rect.y1,
+          &obj.data.rect.x2, &obj.data.rect.y2);
+
+    objects[objectCount++] = obj;
+    printf("Rectangle added successfully\n");
 }
 
 void addCircle(){
