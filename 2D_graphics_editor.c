@@ -225,12 +225,35 @@ void addRectangle(){
     printf("Rectangle added successfully\n");
 }
 
-void addCircle(){
+void addCircle(int xc, int yc, int radius){
+int x = 0, y = radius;
+int d = 3 - 2 * radius;
 
+    while (y >= x) {
+        plot(xc + x, yc + y);
+        plot(xc - x, yc + y);
+        plot(xc + x, yc - y);
+        plot(xc - x, yc - y);
+        plot(xc + y, yc + x);
+        plot(xc - y, yc + x);
+        plot(xc + y, yc - x);
+        plot(xc - y, yc - x);
+
+        x++;
+        if (d > 0) {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        }
+        else {
+            d = d + 4 * x + 6;
+        }
+    }
 }
 
 void addTriangle(){
-
+    if (objectCount >= MAX_OBJECTS) {
+        printf("Object limit reached\n");
+        return;
 }
 
 void deleteObject(){
