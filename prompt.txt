@@ -1,0 +1,351 @@
+PROMPT INTERACTION LOG – 2D GRAPHICS EDITOR PROJECT
+
+======================================================
+PROMPT 1
+======================================================
+
+Analyze the following C program for a menu-driven 2D Graphics Editor using structures, unions, enums, and a 2D character array. Explain the architecture and how each component works.
+
+RESPONSE:
+
+This C program implements a menu-driven 2D Graphics Editor that allows users to draw and manage geometric objects on a text-based canvas.
+
+Program Architecture:
+
+1. Constants
+- ROWS = 30 → Canvas height
+- COLS = 60 → Canvas width
+- MAX = 100 → Maximum number of drawable objects
+
+2. Enumeration
+typedef enum{
+LINE=1,
+RECTANGLE,
+CIRCLE,
+TRIANGLE
+} ObjectType;
+
+Purpose:
+Assigns a numeric identity to each shape.
+
+3. Structures
+
+Line:
+Stores starting and ending coordinates.
+
+Rectangle:
+Stores opposite corners.
+
+Circle:
+Stores center coordinates and radius.
+
+Triangle:
+Stores three vertex coordinates.
+
+4. Union
+
+union{
+Line line;
+Rectangle rect;
+Circle circle;
+Triangle tri;
+};
+
+Purpose:
+Only one shape exists in an object at a time, reducing memory usage.
+
+5. Object Structure
+
+typedef struct{
+ObjectType type;
+
+union{
+Line line;
+Rectangle rect;
+Circle circle;
+Triangle tri;
+} data;
+
+} Object;
+
+Purpose:
+Stores object type and its related data.
+
+6. Canvas
+
+char canvas[ROWS][COLS];
+
+Purpose:
+Acts as the drawing board.
+
+Program Flow:
+
+Initialize Canvas
+↓
+
+Display Menu
+↓
+
+Select Shape
+↓
+
+Store Object
+↓
+
+Render Shape
+↓
+
+Display Canvas
+
+
+======================================================
+PROMPT 2
+======================================================
+
+Find syntax and logical errors in the program and suggest fixes.
+
+RESPONSE:
+
+Issue 1:
+Extra opening brace inside modifyObject().
+
+Incorrect:
+
+switch(type)
+{
+{
+
+Correct:
+
+switch(type)
+{
+
+--------------------------------
+
+Issue 2:
+Object gets deleted before validation.
+
+Current Flow:
+
+Delete Existing Object
+↓
+
+Ask Replacement
+
+Problem:
+If user enters invalid shape, original object is lost.
+
+Suggested Flow:
+
+Validate Input
+↓
+
+Create New Object
+↓
+
+Replace Existing
+
+--------------------------------
+
+Issue 3:
+Input validation inconsistency.
+
+Some functions use scanf directly while others use getInt().
+
+Improvement:
+
+Replace:
+
+scanf("%d",&value);
+
+with:
+
+value=getInt();
+
+--------------------------------
+
+Issue 4:
+Display should automatically redraw after modifications.
+
+Add:
+
+redrawCanvas();
+
+after object changes.
+
+
+======================================================
+PROMPT 3
+======================================================
+
+Explain the drawing algorithms used.
+
+RESPONSE:
+
+LINE DRAWING
+
+Algorithm:
+Bresenham Line Algorithm
+
+Steps:
+1. Compute dx and dy
+2. Determine movement direction
+3. Plot points until destination
+
+Complexity:
+O(max(dx,dy))
+
+
+RECTANGLE DRAWING
+
+Method:
+Draw four connected lines.
+
+Steps:
+Top
+Right
+Bottom
+Left
+
+Complexity:
+O(perimeter)
+
+
+CIRCLE DRAWING
+
+Algorithm:
+Midpoint Circle Algorithm
+
+Steps:
+1. Start at (0,r)
+2. Plot symmetrical points
+3. Update decision parameter
+
+Complexity:
+O(r)
+
+
+TRIANGLE DRAWING
+
+Method:
+Three connected line drawings.
+
+Complexity:
+Depends on side lengths.
+
+
+======================================================
+PROMPT 4
+======================================================
+
+Generate sample execution for testing.
+
+RESPONSE:
+
+Input:
+
+1
+5 5 20 5
+
+2
+10 10 30 20
+
+3
+40 15 6
+
+4
+15 22
+25 25
+20 10
+
+7
+
+
+Expected Output:
+
+---2D GRAPHICS EDITOR---
+
+Line Added
+Rectangle Added
+Circle Added
+Triangle Added
+
+________________________________________________
+
+_____****************___________________________
+
+__________*********************_________________
+
+__________*___________________*_________________
+
+__________*___________________*_________________
+
+__________*********************_________________
+
+___________________________*****_______________
+
+________________________________________________
+
+
+(Canvas output varies depending on coordinates)
+
+
+======================================================
+PROMPT 5
+======================================================
+
+Suggest improvements to make the project more advanced.
+
+RESPONSE:
+
+Feature Improvements:
+
+1. Undo / Redo
+Maintain history stack.
+
+2. Save Canvas
+Store drawings into text files.
+
+3. Load Existing Drawings
+Restore saved sessions.
+
+4. Fill Shapes
+Support interior filling.
+
+5. Move Objects
+Translate shapes.
+
+6. Resize Objects
+Modify dimensions.
+
+7. Rotation
+Rotate around center.
+
+8. Colored Output
+Use ANSI terminal colors.
+
+9. Layer Management
+Bring objects forward/backward.
+
+10. Export Drawing
+Save as image format.
+
+Code Improvements:
+
+main.c
+drawing.c
+objects.c
+ui.c
+utils.c
+
+Advanced Extensions:
+
+- Mouse Support
+- GUI Version
+- OpenGL Rendering
+- Dynamic Memory Allocation
+
+
+======================================================
+END OF PROMPT INTERACTION LOG
+======================================================
